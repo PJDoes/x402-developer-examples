@@ -1,0 +1,38 @@
+{
+  "name": "x402-api-examples",
+  "version": "1.0.0",
+  "description": "Ready-to-run code examples for x402 AI API - LLM, Image, and Video generation with USDC payments",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "generate-wallet": "node generate-wallet.js",
+    "llm": "node javascript/llm-example.js",
+    "image": "node javascript/image-example.js",
+    "video": "node javascript/video-videogenapi.js",
+    "veo": "node javascript/video-veo.js",
+    "sora": "node javascript/video-sora.js"
+  },
+  "keywords": [
+    "x402",
+    "usdc",
+    "payments",
+    "ai",
+    "llm",
+    "image-generation",
+    "video-generation",
+    "base",
+    "crypto",
+    "blockchain"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "x402-fetch": "^0.1.0",
+    "viem": "^2.0.0",
+    "dotenv": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+

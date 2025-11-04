@@ -1,0 +1,12 @@
+# x402 Python Client for automatic payment handling
+x402>=0.1.0
+
+# Ethereum account management
+eth-account>=0.8.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# HTTP requests library
+requests>=2.31.0
+
