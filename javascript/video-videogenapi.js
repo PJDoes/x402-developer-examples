@@ -19,10 +19,9 @@
  * Run: node javascript/video-videogenapi.js
  */
 
-import { wrapFetchWithPayment } from 'x402-fetch';
-import { createWalletClient, http } from 'viem';
+import { withPaymentInterceptor } from 'x402-axios';
+import axios from 'axios';
 import { privateKeyToAccount } from 'viem/accounts';
-import { base } from 'viem/chains';
 import { waitForVideo } from './utils/polling.js';
 import 'dotenv/config';
 
@@ -46,12 +45,10 @@ async function main() {
     
     // 1. Set up wallet with x402
     const account = privateKeyToAccount(PRIVATE_KEY);
-    const walletClient = createWalletClient({
-      account,
-      chain: base,
-      transport: http()
-    });
-    const fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
+    const client = withPaymentInterceptor(
+      axios.create({ baseURL: API_BASE_URL }),
+      account
+    );
     
     console.log(`\n💰 Wallet: ${account.address}`);
     console.log('💸 Cost: $0.15 USDC (generation only)');
@@ -62,18 +59,14 @@ async function main() {
     // 2. Generate video - PAID REQUEST ($0.15)
     console.log('\n📤 Generating video...\n');
     
-    const response = await fetchWithPayment(`${API_BASE_URL}/v1/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'sora-2',
-        prompt: 'Neon-lit cyberpunk city with flying vehicles zooming through holographic billboards',
-        duration: 10,
-        resolution: '720p'
-      })
+    const response = await client.post('/v1/generate', {
+      model: 'sora-2',
+      prompt: 'Neon-lit cyberpunk city with flying vehicles zooming through holographic billboards',
+      duration: 10,
+      resolution: '720p'
     });
     
-    const result = await response.json();
+    const result = response.data;
     
     if (!result.generation_id) {
       throw new Error('No generation_id in response: ' + JSON.stringify(result));

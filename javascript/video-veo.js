@@ -13,10 +13,9 @@
  * Run: node javascript/video-veo.js
  */
 
-import { wrapFetchWithPayment } from 'x402-fetch';
-import { createWalletClient, http } from 'viem';
+import { withPaymentInterceptor } from 'x402-axios';
+import axios from 'axios';
 import { privateKeyToAccount } from 'viem/accounts';
-import { base } from 'viem/chains';
 import 'dotenv/config';
 
 // Configuration
@@ -39,12 +38,10 @@ async function main() {
     
     // 1. Set up wallet with x402
     const account = privateKeyToAccount(PRIVATE_KEY);
-    const walletClient = createWalletClient({
-      account,
-      chain: base,
-      transport: http()
-    });
-    const fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
+    const client = withPaymentInterceptor(
+      axios.create({ baseURL: API_BASE_URL }),
+      account
+    );
     
     console.log(`\n💰 Wallet: ${account.address}`);
     console.log('💸 Cost: $2.00 USDC');
@@ -55,19 +52,15 @@ async function main() {
     // 2. Generate video - PAID REQUEST ($2.00)
     console.log('\n📤 Generating video...\n');
     
-    const response = await fetchWithPayment(`${API_BASE_URL}/v1/veo3/fast/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        prompt: 'Epic ocean waves crashing with dramatic lightning storm approaching',
-        aspect_ratio: '16:9',
-        duration: '8s',
-        resolution: '1080p',
-        generate_audio: true
-      })
+    const response = await client.post('/v1/veo3/fast/generate', {
+      prompt: 'Epic ocean waves crashing with dramatic lightning storm approaching',
+      aspect_ratio: '16:9',
+      duration: '8s',
+      resolution: '1080p',
+      generate_audio: true
     });
     
-    const data = await response.json();
+    const data = response.data;
     
     // 3. Display response
     console.log('✅ Video generated!\n');
@@ -91,7 +84,7 @@ async function main() {
     
     console.log('\n💡 How x402 worked:');
     console.log('1. ✅ Initial request sent → Server: 402 Payment Required');
-    console.log('2. ✅ x402-fetch signed $2.00 USDC payment on Base');
+    console.log('2. ✅ x402-axios signed $2.00 USDC payment on Base');
     console.log('3. ✅ Retried with X-PAYMENT header');
     console.log('4. ✅ Server verified payment & processed request');
     console.log('5. ✅ Payment settled in ~2 seconds\n');

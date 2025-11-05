@@ -13,10 +13,9 @@
  * Run: node javascript/video-sora.js
  */
 
-import { wrapFetchWithPayment } from 'x402-fetch';
-import { createWalletClient, http } from 'viem';
+import { withPaymentInterceptor } from 'x402-axios';
+import axios from 'axios';
 import { privateKeyToAccount } from 'viem/accounts';
-import { base } from 'viem/chains';
 import 'dotenv/config';
 
 // Configuration
@@ -39,12 +38,10 @@ async function main() {
     
     // 1. Set up wallet with x402
     const account = privateKeyToAccount(PRIVATE_KEY);
-    const walletClient = createWalletClient({
-      account,
-      chain: base,
-      transport: http()
-    });
-    const fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
+    const client = withPaymentInterceptor(
+      axios.create({ baseURL: API_BASE_URL }),
+      account
+    );
     
     const duration = 8; // seconds
     const cost = duration * 0.15; // $0.15/second
@@ -57,17 +54,13 @@ async function main() {
     // 2. Generate video - PAID REQUEST
     console.log('\n📤 Generating video...\n');
     
-    const response = await fetchWithPayment(`${API_BASE_URL}/v1/sora/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        prompt: 'Cinematic shot of glowing jellyfish floating through neon-lit underwater caves',
-        duration: duration,
-        size: '1280x720'
-      })
+    const response = await client.post('/v1/sora/generate', {
+      prompt: 'Cinematic shot of glowing jellyfish floating through neon-lit underwater caves',
+      duration: duration,
+      size: '1280x720'
     });
     
-    const data = await response.json();
+    const data = response.data;
     
     // 3. Display response
     console.log('✅ Video generated!\n');
@@ -91,7 +84,7 @@ async function main() {
     
     console.log('\n💡 How x402 worked:');
     console.log('1. ✅ Initial request sent → Server: 402 Payment Required');
-    console.log(`2. ✅ x402-fetch signed $${cost.toFixed(2)} USDC payment on Base`);
+    console.log(`2. ✅ x402-axios signed $${cost.toFixed(2)} USDC payment on Base`);
     console.log('3. ✅ Retried with X-PAYMENT header');
     console.log('4. ✅ Server verified payment & processed request');
     console.log('5. ✅ Payment settled in ~2 seconds\n');

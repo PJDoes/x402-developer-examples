@@ -15,9 +15,10 @@
 import readline from 'readline';
 import { privateKeyToAccount } from 'viem/accounts';
 import { generatePrivateKey } from 'viem/accounts';
-import { createWalletClient, createPublicClient, http, formatUnits } from 'viem';
+import { createPublicClient, http, formatUnits } from 'viem';
 import { base } from 'viem/chains';
-import { wrapFetchWithPayment } from 'x402-fetch';
+import { withPaymentInterceptor } from 'x402-axios';
+import axios from 'axios';
 import { writeFileSync, existsSync, readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -41,9 +42,8 @@ const USDC_ABI = [
 
 // State
 let totalSpent = 0;
-let walletClient;
+let client;
 let account;
-let fetchWithPayment;
 let isReplit = false;
 
 // Create readline interface
@@ -212,14 +212,11 @@ async function importPrivateKey() {
   // Save the private key
   await savePrivateKey(trimmedKey);
   
-  // Initialize wallet client
-  walletClient = createWalletClient({
-    account,
-    chain: base,
-    transport: http()
-  });
-  
-  fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
+  // Initialize client
+  client = withPaymentInterceptor(
+    axios.create({ baseURL: API_BASE_URL }),
+    account
+  );
 }
 
 // Step 2: Wallet creation/import
@@ -252,14 +249,11 @@ async function setupWallet() {
       console.log('\n✅ Using existing wallet configuration.\n');
       account = tempAccount;
       
-      // Initialize wallet client
-      walletClient = createWalletClient({
-        account,
-        chain: base,
-        transport: http()
-      });
-      
-      fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
+      // Initialize client
+      client = withPaymentInterceptor(
+        axios.create({ baseURL: API_BASE_URL }),
+        account
+      );
       
       await question('Press Enter to continue...');
       return;
@@ -308,14 +302,11 @@ async function setupWallet() {
   // Save the private key
   await savePrivateKey(privateKey);
   
-  // Initialize wallet client
-  walletClient = createWalletClient({
-    account,
-    chain: base,
-    transport: http()
-  });
-  
-  fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
+  // Initialize client
+  client = withPaymentInterceptor(
+    axios.create({ baseURL: API_BASE_URL }),
+    account
+  );
 }
 
 // Save private key to appropriate location
@@ -474,18 +465,14 @@ async function testLLMs() {
     console.log(`\n📤 Testing ${model.name} ($${model.cost.toFixed(2)})...`);
     
     try {
-      const response = await fetchWithPayment(`${API_BASE_URL}/v1/llm/${model.endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [
-            { role: 'user', content: 'Say "Hello from x402!" in a creative way.' }
-          ],
-          temperature: 0.8
-        })
+      const response = await client.post(`/v1/llm/${model.endpoint}`, {
+        messages: [
+          { role: 'user', content: 'Say "Hello from x402!" in a creative way.' }
+        ],
+        temperature: 0.8
       });
       
-      const data = await response.json();
+      const data = response.data;
       
       console.log(`✅ ${model.name} responded successfully!`);
       console.log(`\n   Response: "${data.response?.substring(0, 100)}${data.response?.length > 100 ? '...' : ''}"`);
@@ -525,18 +512,14 @@ async function testTickerGeneration() {
     console.log('\n🎨 Testing Ticker-to-Image with $TOSHI (Nano Banana - $0.07)...\n');
     
     try {
-      const response = await fetchWithPayment(`${API_BASE_URL}/v1/nanobanana/ticker-to-image`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ticker: 'TOSHI',
-          prompt: 'Epic cyberpunk themed image featuring the TOSHI mascot',
-          aspect_ratio: '1:1',
-          num_images: 1
-        })
+      const response = await client.post('/v1/nanobanana/ticker-to-image', {
+        ticker: 'TOSHI',
+        prompt: 'Epic cyberpunk themed image featuring the TOSHI mascot',
+        aspect_ratio: '1:1',
+        num_images: 1
       });
       
-      const data = await response.json();
+      const data = response.data;
       
       console.log('✅ Image generated successfully!\n');
       
@@ -557,18 +540,14 @@ async function testTickerGeneration() {
     console.log('⚠️  This may take 30-60 seconds...\n');
     
     try {
-      const response = await fetchWithPayment(`${API_BASE_URL}/v1/veo3.1/ticker-to-video`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ticker: 'TOSHI',
-          prompt: 'Dynamic animation of TOSHI mascot in a vibrant, energetic scene',
-          duration: '8s',
-          generate_audio: true
-        })
+      const response = await client.post('/v1/veo3.1/ticker-to-video', {
+        ticker: 'TOSHI',
+        prompt: 'Dynamic animation of TOSHI mascot in a vibrant, energetic scene',
+        duration: '8s',
+        generate_audio: true
       });
       
-      const data = await response.json();
+      const data = response.data;
       
       console.log('✅ Video generated successfully!\n');
       

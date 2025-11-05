@@ -32,12 +32,12 @@ Error: 402 Payment Required
 2. ❌ **If you see this error**, x402 client isn't installed:
    ```bash
    # JavaScript
-   npm install x402-fetch viem
+   npm install x402-axios axios viem
    
    # Python
    pip install x402 eth-account
    ```
-3. Verify you're using `wrapFetchWithPayment` (JS) or `x402_requests` (Python)
+3. Verify you're using `withPaymentInterceptor` (JS) or `x402_requests` (Python)
 
 ### "Insufficient USDC balance"
 
@@ -279,11 +279,11 @@ Error: unable to verify the first certificate
 
 ## 📦 Installation Issues
 
-### "Module not found: x402-fetch"
+### "Module not found: x402-axios"
 
 **Symptoms**:
 ```
-Error: Cannot find module 'x402-fetch'
+Error: Cannot find module 'x402-axios'
 ```
 
 **Solutions**:
@@ -291,7 +291,7 @@ Error: Cannot find module 'x402-fetch'
    ```bash
    npm install
    # or
-   npm install x402-fetch viem dotenv
+   npm install x402-axios axios viem dotenv
    ```
 2. **Check package.json** exists
 3. **Delete node_modules** and reinstall:
@@ -349,25 +349,25 @@ Error: The engine "node" is incompatible with this module
 
 ## 🐛 Code Issues
 
-### "TypeError: wrapFetchWithPayment is not a function"
+### "TypeError: withPaymentInterceptor is not a function"
 
 **Symptoms**:
 ```javascript
-TypeError: wrapFetchWithPayment is not a function
+TypeError: withPaymentInterceptor is not a function
 ```
 
 **Solutions**:
 1. **Check import**:
    ```javascript
    // Correct
-   import { wrapFetchWithPayment } from 'x402-fetch';
+   import { withPaymentInterceptor } from 'x402-axios';
    
    // Wrong
-   import wrapFetchWithPayment from 'x402-fetch';
+   import withPaymentInterceptor from 'x402-axios';
    ```
-2. **Reinstall x402-fetch**:
+2. **Reinstall x402-axios**:
    ```bash
-   npm install x402-fetch@latest
+   npm install x402-axios@latest
    ```
 
 ### "JSON parse error"
@@ -417,7 +417,7 @@ Issue: "Payment verification failed"
 Environment:
 - Node.js: v18.17.0
 - OS: Windows 11
-- Package versions: x402-fetch@0.1.0, viem@2.0.0
+- Package versions: x402-axios@latest, axios@1.6.0, viem@2.38.4
 
 Error:
 [full error message]

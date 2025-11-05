@@ -101,9 +101,7 @@ Server → Verify Payment → Generate Content → Response
 <summary><b>Node.js / TypeScript</b></summary>
 
 ```bash
-npm install x402-fetch viem
-# or
-npm install x402-axios viem
+npm install x402-axios axios viem
 ```
 </details>
 
@@ -118,36 +116,29 @@ pip install x402 eth_account
 ### Your First Request
 
 <details>
-<summary><b>Node.js (x402-fetch)</b></summary>
+<summary><b>Node.js (x402-axios)</b></summary>
 
 ```javascript
-import { wrapFetchWithPayment } from 'x402-fetch';
-import { createWalletClient, http } from 'viem';
+import { withPaymentInterceptor } from 'x402-axios';
+import axios from 'axios';
 import { privateKeyToAccount } from 'viem/accounts';
-import { base } from 'viem/chains';
 
 // Set up your wallet (with USDC on Base)
 const account = privateKeyToAccount('0xYourPrivateKey');
-const walletClient = createWalletClient({
-  account,
-  chain: base,
-  transport: http()
-});
-const fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
+const client = withPaymentInterceptor(
+  axios.create({ baseURL: 'https://beatsx402.ai' }),
+  account
+);
 
 // Generate video - payment handled automatically!
-const response = await fetchWithPayment('https://beatsx402.ai/v1/generate', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    model: 'kling_25',
-    prompt: 'A cat playing with a ball in a sunny garden',
-    duration: 10,
-    resolution: '1080p'
-  })
+const response = await client.post('/v1/generate', {
+  model: 'kling_25',
+  prompt: 'A cat playing with a ball in a sunny garden',
+  duration: 10,
+  resolution: '1080p'
 });
 
-const result = await response.json();
+const result = response.data;
 console.log('Generation ID:', result.generation_id);
 
 // Check status (FREE - no payment)
@@ -369,17 +360,13 @@ Automatically detects generation mode:
 #### Example: Text-to-Video
 
 ```javascript
-// Node.js with x402-fetch
-const response = await fetchWithPayment('https://beatsx402.ai/v1/generate', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    model: 'kling_25',
-    prompt: 'A beautiful sunset over mountains with birds flying',
-    duration: 10,
-    resolution: '1080p',
-    aspect_ratio: '16:9'
-  })
+// Node.js with x402-axios
+const response = await client.post('/v1/generate', {
+  model: 'kling_25',
+  prompt: 'A beautiful sunset over mountains with birds flying',
+  duration: 10,
+  resolution: '1080p',
+  aspect_ratio: '16:9'
 });
 ```
 
@@ -521,17 +508,13 @@ const data = await response.json();
 #### Example
 
 ```javascript
-const response = await fetchWithPayment('https://beatsx402.ai/v1/openai/images/generate', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    prompt: 'A detailed oil painting of a medieval castle on a hilltop',
-    aspectRatio: '16:9',
-    quality: 'high'
-  })
+const response = await client.post('/v1/openai/images/generate', {
+  prompt: 'A detailed oil painting of a medieval castle on a hilltop',
+  aspectRatio: '16:9',
+  quality: 'high'
 });
 
-const result = await response.json();
+const result = response.data;
 console.log('Image URL:', result.images[0].url);
 ```
 
@@ -555,41 +538,34 @@ console.log('Image URL:', result.images[0].url);
 
 ## 💻 Node.js Integration
 
-### Using x402-fetch (Recommended)
+### Using x402-axios (Recommended)
 
 ```javascript
-import { wrapFetchWithPayment } from 'x402-fetch';
-import { createWalletClient, http } from 'viem';
+import { withPaymentInterceptor } from 'x402-axios';
+import axios from 'axios';
 import { privateKeyToAccount } from 'viem/accounts';
-import { base } from 'viem/chains';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 // Setup wallet
 const account = privateKeyToAccount(process.env.PRIVATE_KEY);
-const walletClient = createWalletClient({
-  account,
-  chain: base,
-  transport: http()
-});
-const fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
+const client = withPaymentInterceptor(
+  axios.create({ baseURL: 'https://beatsx402.ai' }),
+  account
+);
 
 // Generate video
 async function generateVideo(prompt) {
   try {
-    const response = await fetchWithPayment('https://beatsx402.ai/v1/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'kling_25',
-        prompt,
-        duration: 10,
-        resolution: '1080p'
-      })
+    const response = await client.post('/v1/generate', {
+      model: 'kling_25',
+      prompt,
+      duration: 10,
+      resolution: '1080p'
     });
 
-    const result = await response.json();
+    const result = response.data;
     console.log('✅ Video generation started!');
     console.log('Generation ID:', result.generation_id);
     

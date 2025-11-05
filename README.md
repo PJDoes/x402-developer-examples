@@ -189,7 +189,8 @@ npm install
 ```
 
 This installs:
-- `x402-fetch` - HTTP client with automatic payment handling
+- `x402-axios` - HTTP client with automatic payment handling
+- `axios` - HTTP request library
 - `viem` - Ethereum wallet library
 - `dotenv` - Environment variable management
 
@@ -272,28 +273,21 @@ python python/video_videogenapi.py
 
 **JavaScript:**
 ```javascript
-import { wrapFetchWithPayment } from 'x402-fetch';
-import { createWalletClient, http } from 'viem';
+import { withPaymentInterceptor } from 'x402-axios';
+import axios from 'axios';
 import { privateKeyToAccount } from 'viem/accounts';
-import { base } from 'viem/chains';
 
 const account = privateKeyToAccount(process.env.PRIVATE_KEY);
-const walletClient = createWalletClient({
-  account,
-  chain: base,
-  transport: http()
-});
-const fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
+const client = withPaymentInterceptor(
+  axios.create({ baseURL: 'https://beatsx402.ai' }),
+  account
+);
 
-const response = await fetchWithPayment('https://beatsx402.ai/v1/llm/gpt-4o-mini', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    messages: [{ role: 'user', content: 'Hello!' }]
-  })
+const response = await client.post('/v1/llm/gpt-4o-mini', {
+  messages: [{ role: 'user', content: 'Hello!' }]
 });
 
-const data = await response.json();
+const data = response.data;
 console.log(data.response);
 ```
 

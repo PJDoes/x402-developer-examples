@@ -13,10 +13,9 @@
  * Run: node javascript/llm-example.js
  */
 
-import { wrapFetchWithPayment } from 'x402-fetch';
-import { createWalletClient, http } from 'viem';
+import { withPaymentInterceptor } from 'x402-axios';
+import axios from 'axios';
 import { privateKeyToAccount } from 'viem/accounts';
-import { base } from 'viem/chains';
 import 'dotenv/config';
 
 // Configuration
@@ -39,12 +38,10 @@ async function main() {
     
     // 1. Set up wallet with x402
     const account = privateKeyToAccount(PRIVATE_KEY);
-    const walletClient = createWalletClient({
-      account,
-      chain: base,
-      transport: http()
-    });
-    const fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
+    const client = withPaymentInterceptor(
+      axios.create({ baseURL: API_BASE_URL }),
+      account
+    );
     
     console.log(`\n💰 Wallet: ${account.address}`);
     console.log('💸 Cost: $0.01 USDC');
@@ -53,18 +50,14 @@ async function main() {
     // 2. Make request - x402 handles payment automatically
     console.log('\n📤 Sending request...\n');
     
-    const response = await fetchWithPayment(`${API_BASE_URL}/v1/llm/gpt-4o-mini`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: [
-          { role: 'user', content: 'Explain the x402 payment protocol in one sentence.' }
-        ],
-        temperature: 0.8
-      })
+    const response = await client.post('/v1/llm/gpt-4o-mini', {
+      messages: [
+        { role: 'user', content: 'Explain the x402 payment protocol in one sentence.' }
+      ],
+      temperature: 0.8
     });
     
-    const data = await response.json();
+    const data = response.data;
     
     // 3. Display response
     console.log('✅ Response received!\n');
@@ -74,7 +67,7 @@ async function main() {
     
     console.log('\n💡 How x402 worked:');
     console.log('1. ✅ Initial request sent → Server: 402 Payment Required');
-    console.log('2. ✅ x402-fetch signed $0.01 USDC payment on Base');
+    console.log('2. ✅ x402-axios signed $0.01 USDC payment on Base');
     console.log('3. ✅ Retried with X-PAYMENT header');
     console.log('4. ✅ Server verified payment & processed request');
     console.log('5. ✅ Payment settled in ~2 seconds\n');
