@@ -118,7 +118,7 @@ cp .env.example .env
 Edit `.env`:
 ```
 PRIVATE_KEY=0x1234...  # From Step 1
-API_BASE_URL=https://your-server.com
+API_BASE_URL=https://beatsx402.ai
 ```
 
 **Verify**:

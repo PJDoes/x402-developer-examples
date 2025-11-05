@@ -6,7 +6,7 @@ The **fastest and easiest** way to get started with x402 API!
 
 ```bash
 # 1. Clone and navigate
-git clone https://github.com/your-org/x402-developer-examples.git
+git clone https://github.com/PJDoes/x402-developer-examples.git
 cd x402-developer-examples
 
 # 2. Install dependencies

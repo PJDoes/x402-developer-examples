@@ -14,7 +14,7 @@ Get started in 5 minutes with our interactive wizard:
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/your-org/x402-developer-examples.git
+git clone https://github.com/PJDoes/x402-developer-examples.git
 cd x402-developer-examples
 
 # 2. Install dependencies
@@ -41,7 +41,7 @@ If you prefer manual setup or want to use Python:
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/your-org/x402-developer-examples.git
+git clone https://github.com/PJDoes/x402-developer-examples.git
 cd x402-developer-examples
 
 # 2. Install dependencies (choose one)
@@ -239,7 +239,7 @@ cp .env.example .env
 Edit `.env`:
 ```
 PRIVATE_KEY=0x...           # From step 2
-API_BASE_URL=https://your-server.com
+API_BASE_URL=https://beatsx402.ai
 ```
 
 #### 5. Run Examples

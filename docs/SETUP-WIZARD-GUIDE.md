@@ -25,7 +25,7 @@ The Setup Wizard is an interactive command-line tool that guides you through the
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-org/x402-developer-examples.git
+git clone https://github.com/PJDoes/x402-developer-examples.git
 cd x402-developer-examples
 
 # 2. Install dependencies
@@ -456,7 +456,7 @@ The wizard concludes with a summary:
    - Go to https://replit.com
    - Click "Create Repl"
    - Choose "Import from GitHub"
-   - Paste: `https://github.com/your-org/x402-developer-examples`
+   - Paste: `https://github.com/PJDoes/x402-developer-examples`
 
 2. **Run Setup:**
    - Replit auto-installs dependencies
