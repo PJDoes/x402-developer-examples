@@ -20,7 +20,9 @@
  */
 
 import { wrapFetchWithPayment } from 'x402-fetch';
+import { createWalletClient, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+import { base } from 'viem/chains';
 import { waitForVideo } from './utils/polling.js';
 import 'dotenv/config';
 
@@ -44,7 +46,12 @@ async function main() {
     
     // 1. Set up wallet with x402
     const account = privateKeyToAccount(PRIVATE_KEY);
-    const fetchWithPayment = wrapFetchWithPayment(fetch, account);
+    const walletClient = createWalletClient({
+      account,
+      chain: base,
+      transport: http()
+    });
+    const fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
     
     console.log(`\n💰 Wallet: ${account.address}`);
     console.log('💸 Cost: $0.15 USDC (generation only)');

@@ -239,10 +239,17 @@ python python/video_videogenapi.py
 **JavaScript:**
 ```javascript
 import { wrapFetchWithPayment } from 'x402-fetch';
+import { createWalletClient, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+import { base } from 'viem/chains';
 
 const account = privateKeyToAccount(process.env.PRIVATE_KEY);
-const fetchWithPayment = wrapFetchWithPayment(fetch, account);
+const walletClient = createWalletClient({
+  account,
+  chain: base,
+  transport: http()
+});
+const fetchWithPayment = wrapFetchWithPayment(fetch, walletClient);
 
 const response = await fetchWithPayment('https://beatsx402.ai/v1/llm/gpt-4o-mini', {
   method: 'POST',
