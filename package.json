@@ -5,6 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "setup": "node setup-wizard.js",
     "generate-wallet": "node generate-wallet.js",
     "llm": "node javascript/llm-example.js",
     "image": "node javascript/image-example.js",

@@ -8,7 +8,36 @@ Access 30 AI endpoints (LLM, Image, Video) with instant crypto payments. No API 
 
 ## 🚀 Quick Start
 
-Get running in 5 minutes:
+### ⚡ Easiest Way: Interactive Setup Wizard
+
+Get started in 5 minutes with our interactive wizard:
+
+```bash
+# 1. Clone repository
+git clone https://github.com/your-org/x402-developer-examples.git
+cd x402-developer-examples
+
+# 2. Install dependencies
+npm install
+
+# 3. Run the interactive setup wizard
+npm run setup
+```
+
+The wizard will guide you through:
+- ✅ Creating/importing a wallet
+- ✅ Saving credentials (local .env or Replit Secrets)
+- ✅ Funding your wallet
+- ✅ Testing LLM endpoints
+- ✅ Testing image/video generation
+
+**Perfect for beginners!** No prior crypto or coding experience needed.
+
+---
+
+### 🛠️ Manual Setup (Advanced)
+
+If you prefer manual setup or want to use Python:
 
 ```bash
 # 1. Clone repository
@@ -109,6 +138,7 @@ x402:            Request → 402 Payment → USDC Payment → Response
 ### JavaScript/Node.js Examples
 ```
 javascript/
+├── ENDPOINT-EXAMPLES.md     - 📖 Copy-paste code for ALL 30+ endpoints
 ├── llm-example.js           - Chat with GPT-4o Mini
 ├── image-example.js         - Generate images
 ├── video-videogenapi.js     - Generate video + polling (FREE status checks)
@@ -121,6 +151,7 @@ javascript/
 ### Python Examples
 ```
 python/
+├── ENDPOINT-EXAMPLES.md     - 📖 Copy-paste code for ALL 30+ endpoints
 ├── llm_example.py           - Chat with GPT-4o Mini
 ├── image_example.py         - Generate images
 ├── video_videogenapi.py     - Generate video + polling (FREE status checks)
@@ -130,7 +161,10 @@ python/
     └── polling.py           - Helper for status polling
 ```
 
+**💡 New to x402?** Check `ENDPOINT-EXAMPLES.md` in each folder for ready-to-use code snippets covering every endpoint!
+
 ### Documentation
+- `docs/SETUP-WIZARD-GUIDE.md` - Interactive setup wizard walkthrough
 - `docs/ENDPOINTS.md` - Complete endpoint reference
 - `docs/WALLET-SETUP.md` - How to get USDC on Base
 - `docs/TROUBLESHOOTING.md` - Common issues & solutions
