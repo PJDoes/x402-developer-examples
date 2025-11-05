@@ -399,13 +399,14 @@ SyntaxError: Unexpected token < in JSON
 If none of these solutions work:
 
 1. **Check GitHub Issues**: Someone may have same problem
-2. **Create new issue**: Include:
+2. **Join Discord**: [discord.gg/7buaWDUTu7](https://discord.gg/7buaWDUTu7) - Active community support
+3. **Telegram**: [t.me/beatsonbase](https://t.me/beatsonbase) - Quick questions
+4. **Create new issue**: Include:
    - Error message (full stack trace)
    - Code snippet (remove private keys!)
    - Node/Python version
    - OS (Windows/Mac/Linux)
-3. **Join Discord**: https://discord.gg/cdp
-4. **Email support**: support@example.com
+5. **Email**: admin@beatsonbase.ai
 
 ### What to Include
 

@@ -1,6 +1,6 @@
-# x402 AI API - Developer Examples
+# Beats x402 AI API - Developer Examples
 
-**Ready-to-run code examples for AI services with USDC payments on Base**
+**Ready-to-run code examples for Beats AI services with USDC payments on Base**
 
 Access 30 AI endpoints (LLM, Image, Video) with instant crypto payments. No API keys, no accounts—just your wallet.
 
@@ -302,11 +302,15 @@ https://basescan.org/address/YOUR_WALLET_ADDRESS
 
 ## 📚 Resources
 
-- **Live Playground**: Test with shared wallet (no setup needed)
-- **API Documentation**: Complete endpoint reference
-- **x402 Protocol**: https://x402.gitbook.io/x402
-- **Base Network**: https://base.org
-- **Discord Community**: https://discord.gg/cdp
+- **🎮 Live Playground**: [beatsx402.ai](https://beatsx402.ai) - Test all endpoints interactively
+- **📖 API Documentation**: [beatsx402.ai/docs](https://beatsx402.ai/docs) - Complete endpoint reference
+- **🏠 Beats Main Site**: [beatsonbase.ai](https://www.beatsonbase.ai) - About Beats
+- **💬 Community**: 
+  - [Discord](https://discord.gg/7buaWDUTu7) - Get help and share projects
+  - [Telegram](https://t.me/beatsonbase) - Stay updated with Beats
+- **🔗 x402 Protocol**: [Official Docs](https://x402.gitbook.io/x402)
+- **🟦 Base Network**: [base.org](https://base.org) - Layer 2 platform
+- **🏢 Coinbase CDP**: [x402 Product](https://www.coinbase.com/developer-platform/products/x402)
 
 ---
 
@@ -361,11 +365,14 @@ Pull requests welcome! For major changes, please open an issue first.
 
 ## 💬 Support
 
-- **Issues**: GitHub Issues
-- **Discord**: https://discord.gg/cdp
-- **Email**: support@example.com
+- **Discord**: [discord.gg/7buaWDUTu7](https://discord.gg/7buaWDUTu7)
+- **Telegram**: [t.me/beatsonbase](https://t.me/beatsonbase)
+- **Email**: admin@beatsonbase.ai
+- **Issues**: [GitHub Issues](https://github.com/PJDoes/x402-developer-examples/issues)
 
 ---
 
-**Built with ❤️ using [x402 Protocol](https://x402.org) on [Base Network](https://base.org)**
+**Built on Base 🟦 using [x402 Protocol](https://x402.gitbook.io/x402)**
+
+**[Try it live at beatsx402.ai →](https://beatsx402.ai)**
 

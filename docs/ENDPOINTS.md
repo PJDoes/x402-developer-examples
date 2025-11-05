@@ -1,6 +1,8 @@
-# API Endpoints Quick Reference
+# Beats x402 API Endpoints Quick Reference
 
-Complete list of all available endpoints with pricing and parameters.
+Complete list of all available Beats AI endpoints with pricing and parameters.
+
+**Live Playground**: [beatsx402.ai](https://beatsx402.ai)
 
 ---
 

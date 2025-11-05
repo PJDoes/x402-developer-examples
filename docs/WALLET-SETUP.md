@@ -246,7 +246,9 @@ Estimate based on usage:
 - **Website**: https://www.circle.com/en/usdc
 
 ### Getting Help
-- **Discord**: https://discord.gg/cdp
+- **Discord**: [discord.gg/7buaWDUTu7](https://discord.gg/7buaWDUTu7)
+- **Telegram**: [t.me/beatsonbase](https://t.me/beatsonbase)
+- **Email**: admin@beatsonbase.ai
 - **GitHub Issues**: Report problems
 - **Troubleshooting**: See TROUBLESHOOTING.md
 
